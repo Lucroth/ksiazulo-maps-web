@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Książulo na Mapach</title>
+  <link rel="stylesheet" href="lib/leaflet.min.css">
+  <link rel="stylesheet" href="ui.css">
+  <link rel="stylesheet" href="list.css">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#c62828">
+  <link rel="icon" href="icon-192.png">
+</head>
+<body class="kz-root full">
+  <aside>
+    <header class="bar"><b class="kz-brand">Książulo na Mapach</b></header>
+    <div class="filters">
+      <input id="q" type="search" placeholder="Szukaj knajpy, miasta, dania…" autofocus>
+      <div id="f-verdicts" class="kz-filter" role="group" aria-label="Werdykt"></div>
+      <div class="row">
+        <select id="f-city"><option value="">wszystkie miasta</option></select>
+      </div>
+      <div id="count" class="kz-muted kz-small"></div>
+    </div>
+    <ul id="list"></ul>
+  </aside>
+  <main id="map">
+    <div id="map-warning" hidden>Nie udało się wczytać tła mapy - piny działają, klikaj je jak zwykle.</div>
+  </main>
+  <script src="lib/leaflet.min.js"></script>
+  <script src="match.js"></script>
+  <script src="ui.js"></script>
+  <script src="list-common.js"></script>
+  <script src="list.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
+  </script>
+</body>
+</html>
