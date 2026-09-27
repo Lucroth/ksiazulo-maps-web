@@ -34,7 +34,13 @@
   <script src="list-common.js"></script>
   <script src="list.js"></script>
   <script>
-    if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("sw.js");
+      // A new build's worker takes over right after install - reload once so it shows now,
+      // not on the next launch. Skipped on the very first visit (no old worker to replace).
+      if (navigator.serviceWorker.controller)
+        navigator.serviceWorker.addEventListener("controllerchange", () => location.reload(), { once: true });
+    }
   </script>
 </body>
 </html>
