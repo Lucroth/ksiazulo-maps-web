@@ -13,7 +13,7 @@
 </head>
 <body class="kz-root full">
   <aside>
-    <header class="bar"><b class="kz-brand">Książulo na Mapach</b></header>
+    <header class="bar"><b class="kz-brand">Książulo na Mapach</b><button id="to-map" class="link mobile-only">Mapa</button></header>
     <div class="filters">
       <input id="q" type="search" placeholder="Szukaj knajpy, miasta, dania…" autofocus>
       <div id="f-verdicts" class="kz-filter" role="group" aria-label="Werdykt"></div>
@@ -25,6 +25,7 @@
     <ul id="list"></ul>
   </aside>
   <main id="map">
+    <button id="to-list" class="mobile-only">Lista</button>
     <div id="map-warning" hidden>Nie udało się wczytać tła mapy - piny działają, klikaj je jak zwykle.</div>
   </main>
   <script src="lib/leaflet.min.js"></script>

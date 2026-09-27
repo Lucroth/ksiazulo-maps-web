@@ -31,9 +31,24 @@ body.full #map { flex: 1; background: color-mix(in srgb, var(--kz-fg) 12%, var(-
   background: var(--kz-warn-bg); color: var(--kz-fg); border: 1px solid var(--kz-border);
   border-radius: 6px; padding: 4px 10px; font-size: 12px;
 }
+/* OSM tiles are light-only; dim them to match the dark UI */
+@media (prefers-color-scheme: dark) {
+  .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.9); }
+}
+.mobile-only { display: none; }
+#to-list {
+  position: absolute; z-index: 1000; top: 10px; right: 10px;
+  padding: 8px 14px; border-radius: 20px; border: 1px solid var(--kz-border);
+  background: var(--kz-bg); color: var(--kz-fg); font: inherit; font-weight: 600;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 0.3); cursor: pointer;
+}
+/* phones: map full screen, list swapped in over it */
 @media (max-width: 700px) {
-  body.full { flex-direction: column; }
-  body.full aside { width: auto; height: 45vh; border-right: 0; border-bottom: 1px solid var(--kz-border); }
+  body.full { display: block; height: 100dvh; }
+  body.full aside { width: auto; height: 100dvh; border-right: 0; }
+  body.full #map { height: 100dvh; }
+  body.full:not(.show-list) aside, body.full.show-list #map { display: none; }
+  .mobile-only { display: inline-block; }
 }
 .leaflet-popup-content { margin: 10px 12px; }
 .leaflet-popup-content-wrapper, .leaflet-popup-tip { background: var(--kz-bg); color: var(--kz-fg); }
