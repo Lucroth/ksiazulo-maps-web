@@ -26,7 +26,7 @@ function setupList(places, { onChange, onPick }) {
           <b>${esc(p.name)}</b> <span class="kz-muted">${esc(p.city)}</span>
           ${p.muala ? '<span class="kz-muala">MUALA</span>' : ""}
         </div>
-        <div class="kz-muted kz-small">${esc(p.videos[0].date)} · ${esc(p.summary.slice(0, 110))}${p.summary.length > 110 ? "…" : ""}</div>
+        <div class="kz-muted kz-small" title="${esc(p.videos[0].date)}">${agoPl(p.videos[0].date)} ·${esc(p.summary.slice(0, 110))}${p.summary.length > 110 ? "…" : ""}</div>
       </li>`).join("");
     $("list").querySelectorAll("li").forEach((li) =>
       li.addEventListener("click", () => onPick(shown[+li.dataset.i], li)));

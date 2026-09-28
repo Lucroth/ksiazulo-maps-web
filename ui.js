@@ -10,6 +10,34 @@ function fmtTime(url) {
   return (h ? `${h}:${String(m).padStart(2, "0")}` : `${m}`) + `:${String(s).padStart(2, "0")}`;
 }
 
+// Polish plural: 1 miesiąc, 2-4 miesiące, 5+ miesięcy (12-14 take the "many" form).
+function plPlural(n, one, few, many) {
+  if (n === 1) return one;
+  const d = n % 10, dd = n % 100;
+  return d >= 2 && d <= 4 && (dd < 12 || dd > 14) ? few : many;
+}
+
+// "3 tygodnie temu", "5 miesięcy temu", "rok i 3 miesiące temu" for an ISO date.
+function agoPl(iso, now = new Date()) {
+  const then = new Date(iso + "T12:00:00");
+  if (isNaN(then)) return "";
+  const days = Math.floor((now - then) / 86400000);
+  if (days < 1) return "dzisiaj";
+  if (days < 2) return "wczoraj";
+  if (days < 14) return `${days} dni temu`;
+  if (days < 60) {
+    const w = Math.floor(days / 7);
+    return `${w} ${plPlural(w, "tydzień", "tygodnie", "tygodni")} temu`;
+  }
+  let months = (now.getFullYear() - then.getFullYear()) * 12 + now.getMonth() - then.getMonth();
+  if (now.getDate() < then.getDate()) months--;
+  const y = Math.floor(months / 12), m = months % 12;
+  const mStr = m ? `${m === 1 ? "" : m + " "}${plPlural(m, "miesiąc", "miesiące", "miesięcy")}` : "";
+  if (!y) return `${mStr} temu`;
+  const yStr = y === 1 ? "rok" : `${y} ${plPlural(y, "rok", "lata", "lat")}`;
+  return `${yStr}${m ? " i " + (m === 1 ? "1 miesiąc" : mStr) : ""} temu`;
+}
+
 const OVERALL = { positive: ["Poleca", "pos"], mixed: ["Tak sobie", "mix"], negative: ["Nie poleca", "neg"] };
 const VERDICT = { "+": "pos", "~": "mix", "-": "neg" };
 
@@ -101,7 +129,7 @@ function placeHtml(p, { full = true, unsure = false, showMapsLink = false } = {}
   const videos = p.videos.map((v, i) => `<a class="kz-video" href="${esc(v.url)}" target="_blank">
       ${p.videos.length > 1 ? `<span class="kz-dot ${OVERALL[v.overall]?.[1] || "mix"}"
         title="${esc(OVERALL[v.overall]?.[0] || "")}"></span>` : ""}▶ Oglądaj od ${fmtTime(v.url)}
-      <span class="kz-muted">· ${esc(v.title)} · ${esc(v.date)}${i === 0 && p.videos.length > 1 ? " · najnowsza" : ""}</span></a>`).join("");
+      <span class="kz-muted">· ${esc(v.title)} · ${esc(v.date)} (${agoPl(v.date)})${i === 0 && p.videos.length > 1 ? " · najnowsza" : ""}</span></a>`).join("");
   return `
     <div class="kz-head">
       <span class="kz-brand">Książulo</span>
